@@ -1,0 +1,19 @@
+<div *ngIf="formDetails">
+    <div *ngFor="let formField of formDetails.data.form_fields">
+        <label>{{formField.label}}:</label>
+        <input type="text" [value]="formField.description">
+    </div>
+</div>
+<button (click) = "getFormFields()">GET Form</button>
+<br/>
+<div>
+    <app-child></app-child>
+</div>
+<br/>
+{{submissionResult}}
+<div *ngIf="submissionResult">
+    <span *ngIf = "submissionResult.succes">Data submitted successfully.</span> 
+</div>
+<div>
+    <button (click) = "submitForm()">SUBMIT Form</button>
+</div>
