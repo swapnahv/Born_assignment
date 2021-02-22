@@ -1,19 +1,56 @@
-<div *ngIf="formDetails">
-    <div *ngFor="let formField of formDetails.data.form_fields">
-        <label>{{formField.label}}:</label>
-        <input type="text" [value]="formField.description">
-    </div>
-</div>
+
 <button (click) = "getFormFields()">GET Form</button>
-<br/>
-<div>
-    <app-child></app-child>
-</div>
-<br/>
-{{submissionResult}}
-<div *ngIf="submissionResult">
-    <span *ngIf = "submissionResult.succes">Data submitted successfully.</span> 
-</div>
-<div>
-    <button (click) = "submitForm()">SUBMIT Form</button>
-</div>
+<form *ngIf="formDetails" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div *ngFor="let formElement of formDetails.data.form_fields" class="row">
+        <div [ngSwitch]="formElement.component" class="col-md-12 col-12 col-sm-12">
+            <div *ngSwitchCase="'textinput'">
+                <label for="{{formElement.label}}">
+                    <span>{{formElement.label}}</span>
+                    <input type="text" name="{{formElement.label}}" formControlName="{{formElement.label}}" />
+                </label>
+            </div>
+            <div *ngSwitchCase="'textarea'">
+                <label for="{{formElement.label}}">
+                    <span>{{formElement.label}}</span>
+                    <textarea name="{{formElement.label}}" formControlName="{{formElement.label}}">
+
+                    </textarea>
+                </label>
+            </div>
+            <div *ngSwitchCase="'select'">
+                <label for="{{formElement.label}}">
+                    <span>{{formElement.label}}</span>
+
+                    <select id="" formControlName="{{formElement.label}}">
+                        <option hidden disabled selected></option>
+                        <option *ngFor="let option of formElement.options" >
+                            {{option}}
+                        </option>
+                    </select>
+                </label>
+            </div>
+            <div *ngSwitchCase="'checkbox'">
+                <label for="{{formElement.label}}">
+                    <span>{{formElement.label}}</span>
+
+                    <div formGroupName="{{formElement.label}}">
+                        <div *ngFor="let option of formElement.options">
+                            <input type="checkbox" id="{{option}}" formControlName="{{option}}">
+                            <label for="{{option}}">{{option}}</label>
+                        </div>
+                    </div>
+                </label>
+            </div>
+            <div *ngSwitchCase="'radio'">
+                <label for="{{formElement.label}}">
+                    <span>{{formElement.label}}</span>
+                    <div *ngFor="let option of formElement.options">
+                        <input name="{{formElement.label}}" [value]="option" type="radio" id="{{option}}" formControlName="{{formElement.label}}">
+                        <label for="{{option}}">{{option}}</label>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+    <button type="submit" [disabled]="!formGroup.valid">SUBMIT Form</button>
+</form>
