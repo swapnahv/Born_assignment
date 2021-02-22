@@ -6,13 +6,13 @@
             <div *ngSwitchCase="'textinput'">
                 <label for="{{formElement.label}}">
                     <span>{{formElement.label}}</span>
-                    <input type="text" name="{{formElement.label}}" formControlName="{{formElement.label}}" />
+                    <input type="text" [value] = "formElement.label" name="{{formElement.label}}" formControlName="{{formElement.label}}" />
                 </label>
             </div>
             <div *ngSwitchCase="'textarea'">
                 <label for="{{formElement.label}}">
                     <span>{{formElement.label}}</span>
-                    <textarea name="{{formElement.label}}" formControlName="{{formElement.label}}">
+                    <textarea [value] = "formElement.label" name="{{formElement.label}}" formControlName="{{formElement.label}}">
 
                     </textarea>
                 </label>

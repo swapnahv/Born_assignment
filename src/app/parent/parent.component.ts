@@ -9,7 +9,6 @@ import { DetailsService } from '../details.service';
 })
 export class ParentComponent implements OnInit {
 
-  EmployeeName = new FormControl('');
   formDetails;
   submissionResult;
 
@@ -35,18 +34,19 @@ export class ParentComponent implements OnInit {
       if(formTemplate.component === "checkbox" || formTemplate.component === "select") {
         let boxGroup = {};
         formTemplate.options.forEach(option => {
-          let validators = [];
           boxGroup[option] = new FormControl((formTemplate.autoselect && formTemplate.autoselect.includes(option)) || false);
         });
         group[formTemplate.label] = new FormGroup(boxGroup);
-      }
+      } 
       else {
-        group[formTemplate.label] = new FormControl(formDetails.autofill || '');
+        if(formTemplate.component === "radio" && formTemplate.autoselect){
+          group[formTemplate.label] = new FormControl(formTemplate.autoselect[0] || false);
+        } else
+        group[formTemplate.label] = new FormControl(formTemplate.autofill || '');
+        
         let validators = [];
   
         if (formTemplate.required) validators.push(Validators.required);
-        if (formTemplate.validation) validators.push(Validators.pattern(formTemplate.validation));
-  
         group[formTemplate.label].setValidators(validators);
       }
       if(!formTemplate.editable) group[formTemplate.label].disable();
